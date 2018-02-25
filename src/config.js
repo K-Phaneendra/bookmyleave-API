@@ -23,7 +23,7 @@ const config = {
   all: {
     env: process.env.NODE_ENV || 'development',
     root: path.join(__dirname, '..'),
-    port: process.env.PORT || 9000,
+    port: process.env.PORT || 1212,
     ip: process.env.IP || '0.0.0.0',
     defaultEmail: 'no-reply@tts.com',
     sendgridKey: requireProcessEnv('SENDGRID_KEY'),
@@ -47,7 +47,7 @@ const config = {
   },
   development: {
     mongo: {
-      uri: 'mongodb://localhost/tts-dev',
+      uri: 'mongodb://localhost/bookmyleave',
       options: {
         debug: true
       }

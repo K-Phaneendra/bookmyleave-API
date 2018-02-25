@@ -39,7 +39,7 @@ employeesSchema.methods = {
     }
   }
 
-const model = mongoose.model('employees', employeesSchema)
+const model = mongoose.model('Employees', employeesSchema)
 
 export const schema = model.schema
 export default model
