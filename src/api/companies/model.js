@@ -1,39 +1,28 @@
 import mongoose, { Schema } from 'mongoose'
 
-const employeesSchema = new Schema({
+const companiesSchema = new Schema({
     name: {
-        type: String
-    },
-    code: {
       type: String
     },
     createdBy: {
       type: Object
     },
-    email: {
-      type: String
-    },
-    password: {
-      type: String
-    },
-    companyid: {
+    admin: {
       type: Object
     }
 }, {
     timestamps: true
 });
 
-employeesSchema.methods = {
+companiesSchema.methods = {
     view (full) {
       const view = {
         id: this.id,
         name: this.name,
-        code: this.code,
         createdBy: this.createdBy,
         createdAt: this.createdAt,
         updatedAt: this.updatedAt,
-        email: this.email,
-        companyid: this.companyid,
+        admin: this.admin,
       }
 
       return full ? {
@@ -43,7 +32,7 @@ employeesSchema.methods = {
     }
   }
 
-const model = mongoose.model('Employees', employeesSchema)
+const model = mongoose.model('Companies', companiesSchema)
 
 export const schema = model.schema
 export default model

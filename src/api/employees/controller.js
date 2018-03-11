@@ -2,6 +2,8 @@ import _ from 'lodash'
 import { success, notFound } from '../../services/response/'
 import { Employees } from '.'
 import mongoose from 'mongoose'
+//import md5 from 'md5';
+import Companies from '../companies/model';
 
 var path = require('path');
 
@@ -12,6 +14,49 @@ export const create = ({ bodymen: { body } }, res, next) => {
   Employees.create(body)
     .then((employees) => employees.view(true))
     .then(success(res, 201))
+    .catch(next)
+}
+
+export const registeredAdmin = (req, res, next) => {
+  if (req.body.empCollection.createdBy !== undefined) {
+    req.body.empCollection.createdBy = new mongoose.Types.ObjectId.createFromHexString(req.body.empCollection.createdBy.replace("'",""));
+  }
+  Employees.create(req.body.empCollection)
+    .then((employees) => {
+      employees.view(true)
+      const compCollection = {
+        name: req.body.name,
+        admin: employees['_id']
+      };
+      Companies.create(compCollection)
+        .then((companies) => {
+          companies.view(true)
+          const empColl = {
+            id: compCollection.admin,
+            companyid: companies['_id']
+          };
+          Employees.findOneAndUpdate({ _id: empColl.id }, { companyid: empColl.companyid }, {upsert:false, new: true})
+          .then(notFound(res))
+          .then((employees) => employees ? _.merge(employees).save() : null)
+          .then((employees) => employees ? employees.view(true) : null)
+          .then(success(res))
+        })
+    })
+}
+
+export const checkLogin = (req, res, next) => {
+  Employees.find({"email": req.body.email, "password":req.body.password }, {password: 0})
+  .then((employees) => employees.map((employee) => employee.view()))
+  .then(success(res))
+  .catch(next)
+}
+
+export const showByCompid = (req, res, next) => {
+  console.log('line48', req.body);
+  const companyid = new mongoose.Types.ObjectId.createFromHexString(req.body.companyid.replace("'",""));
+  Employees.find({ companyid: companyid })
+  .then((employees) => employees.map((employee) => employee.view()))
+    .then(success(res))
     .catch(next)
 }
 

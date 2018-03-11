@@ -1,31 +1,31 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { create, index, show, update, destroy, registeredAdmin, checkLogin, showByCompid } from './controller'
+import { create, index, show, update, destroy, checkCompanyonRegister } from './controller'
 import { schema } from './model'
-export Employees, { schema } from './model'
+export Companies, { schema } from './model'
 
 const router = new Router()
-const { name, code, createdBy, email, password, companyid } = schema.tree
+const { name, admin, createdBy, email, password } = schema.tree
 
 /**
  * @api {post} /pmployees Create pmployees
- * @apiName CreateEmployees
- * @apiGroup Employees
+ * @apiName CreateCompanies
+ * @apiGroup Companies
  * @apiParam countryName Country's name.
  * @apiParam status Country's status.
- * @apiSuccess {Object} Employees Country data.
+ * @apiSuccess {Object} Companies Country data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
- * @apiError 404 Employees not found.
+ * @apiError 404 Companies not found.
  */
 router.post('/',
-    body({ name, code, createdBy, email, password, companyid }),
+    body({ name, admin, createdBy, email, password }),
     create)
 
 /**
  * @api {get} /pmployees Retrieve country
  * @apiName RetrieveCountry
- * @apiGroup Employees
+ * @apiGroup Companies
  * @apiUse listParams
  * @apiSuccess {Object[]} pmployees List of pmployees.
  * @apiError {Object} 400 Some parameters may contain invalid values.
@@ -45,8 +45,8 @@ router.get('/',
 
 /**
  * @api {get} /pmployees/:id Retrieve pmployees
- * @apiName RetrieveEmployees
- * @apiGroup Employees
+ * @apiName RetrieveCompanies
+ * @apiGroup Companies
  * @apiSuccess {Object} pmployees country data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 pmployees not found.
@@ -56,30 +56,29 @@ router.get('/:id',
 
 /**
  * @api {put} /pmployees Create pmployees
- * @apiName CreateEmployees
- * @apiGroup Employees
+ * @apiName CreateCompanies
+ * @apiGroup Companies
  * @apiParam countryName country's countryName.
  * @apiParam status country's status.
- * @apiSuccess {Object} Employees country data.
+ * @apiSuccess {Object} Companies country data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
- * @apiError 404 Employees not found.
+ * @apiError 404 Companies not found.
  */
 router.put('/:id',
-    body({ name, code, createdBy, email, password, companyid }),
+    body({ name, admin, createdBy, email, password }),
     update)
 
 /**
 * @api {delete} /pmployees/:id Delete pmployees
-* @apiName DeleteEmployees
-* @apiGroup Employees
+* @apiName DeleteCompanies
+* @apiGroup Companies
 * @apiSuccess (Success 204) 204 No Content.
-* @apiError 404 Employees not found.
+* @apiError 404 Companies not found.
 */
 router.delete('/:id',
     destroy)
 
-router.post('/registeredAdmin', registeredAdmin)
-router.post('/login', checkLogin)
-router.post('/companyid', showByCompid)
+// check company name
+router.post('/registeredCompany', checkCompanyonRegister)
 
 export default router

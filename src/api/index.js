@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import employees from './employees'
+import companies from './companies'
 
 const router = new Router()
 
@@ -27,5 +28,6 @@ const router = new Router()
  * @apiParam {String[]} [fields] Fields to be returned.
  */
 router.use('/employees', employees)
+router.use('/companies', companies)
 
 export default router
