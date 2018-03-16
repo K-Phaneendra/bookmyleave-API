@@ -11,6 +11,7 @@ export const create = ({ bodymen: { body } }, res, next) => {
   if (body.createdBy !== undefined) {
     body.createdBy = new mongoose.Types.ObjectId.createFromHexString(body.createdBy.replace("'",""));
   }
+  body.companyid = new mongoose.Types.ObjectId.createFromHexString(body.companyid.replace("'",""));
   Employees.create(body)
     .then((employees) => employees.view(true))
     .then(success(res, 201))
@@ -75,7 +76,7 @@ Employees.find(query, select, cursor)
     .catch(next)
 
 export const update = ({ bodymen: { body }, params }, res, next) => {
-  Employees.findOneAndUpdate({ _id: params.id }, { name: body.name }, {upsert:false, new: true})
+  Employees.findOneAndUpdate({ _id: params.id }, { name: body.name, email: body.email }, {upsert:false, new: true})
     .then(notFound(res))
     .then((employees) => employees ? _.merge(employees, body).save() : null)
     .then((employees) => employees ? employees.view(true) : null)
@@ -86,7 +87,8 @@ export const update = ({ bodymen: { body }, params }, res, next) => {
 export const destroy = ({ params }, res, next) =>
 Employees.findById(params.id)
     .then(notFound(res))
-    .then((employees) => employees ? _.merge(employees, { status: 'DELETED' }).save() : null)
+    .then((employees) => employees ? employees.remove() : null)
+    // .then((employees) => employees ? _.merge(employees, { status: 'DELETED' }).save() : null)
     .then(success(res, 204))
     .catch(next)
 
