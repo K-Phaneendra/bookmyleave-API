@@ -16,6 +16,9 @@ const employeesSchema = new Schema({
     password: {
       type: String
     },
+    resourceManager: {
+      type: Object
+    },
     companyid: {
       type: Object
     }
@@ -33,6 +36,7 @@ employeesSchema.methods = {
         createdAt: this.createdAt,
         updatedAt: this.updatedAt,
         email: this.email,
+        resourceManager: this.resourceManager,
         companyid: this.companyid,
       }
 

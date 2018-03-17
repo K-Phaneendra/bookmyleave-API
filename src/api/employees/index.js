@@ -6,7 +6,7 @@ import { schema } from './model'
 export Employees, { schema } from './model'
 
 const router = new Router()
-const { name, code, createdBy, email, password, companyid } = schema.tree
+const { name, code, createdBy, email, password, resourceManager, companyid } = schema.tree
 
 /**
  * @api {post} /pmployees Create pmployees
@@ -19,7 +19,7 @@ const { name, code, createdBy, email, password, companyid } = schema.tree
  * @apiError 404 Employees not found.
  */
 router.post('/',
-    body({ name, code, createdBy, email, password, companyid }),
+    body({ name, code, createdBy, email, password, resourceManager, companyid }),
     create)
 
 /**
@@ -65,7 +65,7 @@ router.get('/:id',
  * @apiError 404 Employees not found.
  */
 router.put('/:id',
-    body({ name, code, createdBy, email, password, companyid }),
+    body({ name, code, createdBy, email, password, resourceManager, companyid }),
     update)
 
 /**

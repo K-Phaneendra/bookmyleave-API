@@ -12,6 +12,7 @@ export const create = ({ bodymen: { body } }, res, next) => {
     body.createdBy = new mongoose.Types.ObjectId.createFromHexString(body.createdBy.replace("'",""));
   }
   body.companyid = new mongoose.Types.ObjectId.createFromHexString(body.companyid.replace("'",""));
+  body.resourceManager = new mongoose.Types.ObjectId.createFromHexString(body.resourceManager.replace("'",""));
   Employees.create(body)
     .then((employees) => employees.view(true))
     .then(success(res, 201))
@@ -66,7 +67,6 @@ export const checkLogin = (req, res, next) => {
 }
 
 export const showByCompid = (req, res, next) => {
-  console.log('line48', req.body);
   const companyid = new mongoose.Types.ObjectId.createFromHexString(req.body.companyid.replace("'",""));
   Employees.find({ companyid: companyid })
   .then((employees) => employees.map((employee) => employee.view()))
@@ -89,7 +89,8 @@ Employees.find(query, select, cursor)
     .catch(next)
 
 export const update = ({ bodymen: { body }, params }, res, next) => {
-  Employees.findOneAndUpdate({ _id: params.id }, { name: body.name, email: body.email }, {upsert:false, new: true})
+  body.resourceManager = new mongoose.Types.ObjectId.createFromHexString(body.resourceManager.replace("'",""));
+  Employees.findOneAndUpdate({ _id: params.id }, { name: body.name, email: body.email, resourceManager: body.resourceManager }, {upsert:false, new: true})
     .then(notFound(res))
     .then((employees) => employees ? _.merge(employees, body).save() : null)
     .then((employees) => employees ? employees.view(true) : null)
