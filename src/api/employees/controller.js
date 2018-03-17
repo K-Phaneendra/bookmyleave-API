@@ -46,10 +46,23 @@ export const registeredAdmin = (req, res, next) => {
 }
 
 export const checkLogin = (req, res, next) => {
-  Employees.find({"email": req.body.email, "password":req.body.password }, {password: 0})
-  .then((employees) => employees.map((employee) => employee.view()))
-  .then(success(res))
-  .catch(next)
+  // Employees.find({"email": req.body.email, "password":req.body.password }, {password: 0})
+  Employees.find({"email": req.body.email })
+  .then((employees) => {
+    if (employees.length === 0) {
+      res.send([]);
+    } else {
+      employees.map((employee) => {
+        if (employee.password === req.body.password) {
+          res.send([employee.view()]);
+        } else {
+          res.send({login: "INVALID_PASS"});
+        }
+      });
+    }
+  })
+  // .then(success(res))
+  // .catch(next)
 }
 
 export const showByCompid = (req, res, next) => {
