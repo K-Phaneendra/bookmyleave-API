@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import employees from './employees'
 import companies from './companies'
+import leaverequests from './leaverequests'
 
 const router = new Router()
 
@@ -29,5 +30,6 @@ const router = new Router()
  */
 router.use('/employees', employees)
 router.use('/companies', companies)
+router.use('/leaverequests', leaverequests)
 
 export default router
