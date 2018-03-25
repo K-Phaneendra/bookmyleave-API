@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { create, index, show, update, destroy, registeredAdmin, checkLogin, showByCompid } from './controller'
+import { create, index, show, update, destroy, getbyfromid } from './controller'
 import { schema } from './model'
 export Leaverequests, { schema } from './model'
 
@@ -78,8 +78,6 @@ router.put('/:id',
 router.delete('/:id',
     destroy)
 
-router.post('/registeredAdmin', registeredAdmin)
-router.post('/login', checkLogin)
-router.post('/companyid', showByCompid)
+router.get('/byfromid/:id', getbyfromid)
 
 export default router
