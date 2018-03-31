@@ -45,13 +45,15 @@ Leaverequests.find(query, select, cursor)
     .then(success(res))
     .catch(next)
 
-export const update = ({ bodymen: { body }, params }, res, next) => {
-  body.resourceManager = new mongoose.Types.ObjectId.createFromHexString(body.resourceManager.replace("'",""));
-  Leaverequests.findOneAndUpdate({ _id: params.id }, { name: body.name, email: body.email, resourceManager: body.resourceManager }, {upsert:false, new: true})
+export const update = (req, res, next) => {
+  console.log(req.body, "body");
+  if (req.body.createdBy !== undefined) {
+    req.body.createdBy = new mongoose.Types.ObjectId.createFromHexString(req.body.createdBy.replace("'",""));
+  }
+  Leaverequests.findOneAndUpdate({ _id: req.body.id }, { status: req.body.status }, {upsert:false, new: true})
     .then(notFound(res))
-    .then((employees) => employees ? _.merge(employees, body).save() : null)
-    .then((employees) => employees ? employees.view(true) : null)
-    .then(success(res))
+    // .then((employees) => employees ? employees.view(true) : null)
+    // .then(success(res))
     .catch(next)
 }
 
@@ -64,9 +66,17 @@ Leaverequests.findById(params.id)
     .catch(next)
 
 export const getbyfromid = ({ params }, res, next) => {
-  console.log(params.id, 'line67')
   params.id = new mongoose.Types.ObjectId.createFromHexString(params.id.replace("'",""));
   Leaverequests.find({ from: params.id })
+    .then(notFound(res))
+    .then((employees) => employees.map((employee) => employee.view()))
+    .then(success(res))
+    .catch(next)
+}
+
+export const getbytoid = ({ params }, res, next) => {
+  params.id = new mongoose.Types.ObjectId.createFromHexString(params.id.replace("'",""));
+  Leaverequests.find({ to: params.id })
     .then(notFound(res))
     .then((employees) => employees.map((employee) => employee.view()))
     .then(success(res))
